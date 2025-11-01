@@ -1,0 +1,533 @@
+{
+  "info": {
+    "name": "HealthMate API Collection",
+    "description": "Complete API collection for HealthMate - Sehat ka Smart Dost Backend\n\nAll endpoints require authentication except login/signup endpoints.\nToken is automatically saved after login.\n\nBase URL: http://localhost:5000/api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "email", "value": "admin@healthmate.com", "type": "text"},
+                {"key": "firstName", "value": "Admin", "type": "text"},
+                {"key": "lastName", "value": "User", "type": "text"},
+                {"key": "phoneNumber", "value": "+1234567890", "type": "text"},
+                {"key": "password", "value": "admin123", "type": "text"},
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/admin/signup"
+          }
+        },
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.collectionVariables.set('authToken', jsonData.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@healthmate.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{baseUrl}}/admin/login"
+          }
+        },
+        {
+          "name": "User Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "email", "value": "user@healthmate.com", "type": "text"},
+                {"key": "firstName", "value": "John", "type": "text"},
+                {"key": "lastName", "value": "Doe", "type": "text"},
+                {"key": "phoneNumber", "value": "+1234567890", "type": "text"},
+                {"key": "password", "value": "user123", "type": "text"},
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/user/signup"
+          }
+        },
+        {
+          "name": "User Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.collectionVariables.set('authToken', jsonData.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@healthmate.com\",\n  \"password\": \"user123\"\n}"
+            },
+            "url": "{{baseUrl}}/user/login"
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@healthmate.com\"\n}"
+            },
+            "url": "{{baseUrl}}/user/forgot-password"
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@healthmate.com\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": "{{baseUrl}}/user/verify-otp"
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@healthmate.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"newpassword123\"\n}"
+            },
+            "url": "{{baseUrl}}/user/reset-password"
+          }
+        },
+        {
+          "name": "Get Own Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/user/profile"
+          }
+        },
+        {
+          "name": "Update Own Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John Updated\",\n  \"lastName\": \"Doe Updated\",\n  \"email\": \"newemail@healthmate.com\",\n  \"phoneNumber\": \"+1234567890\"\n}"
+            },
+            "url": "{{baseUrl}}/user/profile"
+          }
+        },
+        {
+          "name": "Update Own Profile Image",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/user/profile-image"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - User Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/admin/users"
+          }
+        },
+        {
+          "name": "Add User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "email", "value": "newuser@healthmate.com", "type": "text"},
+                {"key": "firstName", "value": "Jane", "type": "text"},
+                {"key": "lastName", "value": "Smith", "type": "text"},
+                {"key": "phoneNumber", "value": "+1234567890", "type": "text"},
+                {"key": "password", "value": "password123", "type": "text"},
+                {"key": "isAdmin", "value": "false", "type": "text"},
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/admin/user"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "firstName", "value": "Jane Updated", "type": "text"},
+                {"key": "lastName", "value": "Smith Updated", "type": "text"},
+                {"key": "phoneNumber", "value": "+9876543210", "type": "text"},
+                {"key": "isAdmin", "value": "false", "type": "text"},
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/admin/user/:id"
+          }
+        },
+        {
+          "name": "Update User Profile Image",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "profileImg", "type": "file", "src": []}
+              ]
+            },
+            "url": "{{baseUrl}}/admin/user/:id/profile-image"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/admin/user/:id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/dashboard/stats"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Upload Report",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "file", "type": "file", "src": [], "description": "Report file (JPG, PNG, or PDF)"},
+                {"key": "reportType", "value": "CBC", "type": "text", "description": "Type: CBC, X-Ray, Ultrasound, Blood Test, Other"},
+                {"key": "date", "value": "2024-12-15", "type": "text", "description": "Report date (YYYY-MM-DD)"}
+              ]
+            },
+            "url": "{{baseUrl}}/reports/upload",
+            "description": "Upload a medical report file. The file will be automatically analyzed by Gemini AI."
+          }
+        },
+        {
+          "name": "Create Manual Report - CBC",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportType\": \"CBC\",\n  \"date\": \"2024-12-15\",\n  \"manualData\": {\n    \"hemoglobin\": \"12.5 g/dL\",\n    \"rbc\": \"4.5 million/μL\",\n    \"wbc\": \"7000/μL\",\n    \"platelets\": \"250000/μL\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/reports/manual"
+          }
+        },
+        {
+          "name": "Create Manual Report - Blood Test",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportType\": \"Blood Test\",\n  \"date\": \"2024-12-15\",\n  \"manualData\": {\n    \"glucose\": \"95 mg/dL\",\n    \"cholesterol\": \"180 mg/dL\",\n    \"hdl\": \"50 mg/dL\",\n    \"ldl\": \"120 mg/dL\",\n    \"triglycerides\": \"150 mg/dL\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/reports/manual"
+          }
+        },
+        {
+          "name": "Create Manual Report - X-Ray",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportType\": \"X-Ray\",\n  \"date\": \"2024-12-10\",\n  \"manualData\": {\n    \"area\": \"Chest\",\n    \"findings\": \"Normal lung fields\",\n    \"impression\": \"No acute abnormality detected\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/reports/manual"
+          }
+        },
+        {
+          "name": "Get All Reports",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports"
+          }
+        },
+        {
+          "name": "Get Reports by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports?reportType=CBC"
+          }
+        },
+        {
+          "name": "Get Reports by Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports?date=2024-12-15"
+          }
+        },
+        {
+          "name": "Get Report by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports/:reportId"
+          }
+        },
+        {
+          "name": "Get Reports Timeline",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports/timeline",
+            "description": "Get reports timeline. Add query params: ?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD for date range"
+          }
+        },
+        {
+          "name": "Get Reports Timeline with Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports/timeline?startDate=2024-12-01&endDate=2024-12-31"
+          }
+        },
+        {
+          "name": "Download Report File",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reports/:reportId/download"
+          }
+        },
+        {
+          "name": "Delete Report",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/reports/:reportId"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vitals",
+      "item": [
+        {
+          "name": "Add Vital Entry",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2024-12-15\",\n  \"bp\": \"120/80\",\n  \"sugar\": 95,\n  \"weight\": 70,\n  \"pulse\": 72,\n  \"temperature\": 98.6,\n  \"notes\": \"Feeling good today\"\n}"
+            },
+            "url": "{{baseUrl}}/vitals"
+          }
+        },
+        {
+          "name": "Get All Vitals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vitals"
+          }
+        },
+        {
+          "name": "Get Vitals by Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vitals?date=2024-12-15"
+          }
+        },
+        {
+          "name": "Get Vital by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vitals/:vitalId"
+          }
+        },
+        {
+          "name": "Get Vitals Timeline",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vitals/timeline",
+            "description": "Get vitals timeline. Add query params: ?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD for date range"
+          }
+        },
+        {
+          "name": "Get Vitals Timeline with Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vitals/timeline?startDate=2024-12-01&endDate=2024-12-31"
+          }
+        },
+        {
+          "name": "Update Vital Entry",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bp\": \"125/82\",\n  \"sugar\": 98,\n  \"weight\": 71,\n  \"notes\": \"Updated after workout\"\n}"
+            },
+            "url": "{{baseUrl}}/vitals/:vitalId"
+          }
+        },
+        {
+          "name": "Delete Vital Entry",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/vitals/:vitalId"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Send Message to AI - Health Question",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What are the symptoms of high blood pressure?\"\n}"
+            },
+            "url": "{{baseUrl}}/chat/message"
+          }
+        },
+        {
+          "name": "Send Message to AI - Diet Advice",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What foods should I avoid if I have diabetes?\"\n}"
+            },
+            "url": "{{baseUrl}}/chat/message"
+          }
+        },
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/chat/history"
+          }
+        },
+        {
+          "name": "Clear Chat History",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/chat/history"
+          }
+        }
+      ]
+    }
+  ]
+}
+
